@@ -41,7 +41,7 @@ Toio::Toio() {
 
 // バッテリー残量をintで返す
 int Toio::battrey() {
-  return pChrBattery->readUInt8();
+  return pChrBattery->readValue<uint8_t>();
 }
 // アクセサメソッド
 void Toio::setBleAdress(std::string address) {

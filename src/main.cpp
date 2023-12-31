@@ -311,7 +311,6 @@ bool connectToServer() {
         data[1] = 0x00;
         data[2] = 0x80;
         data[3] = 0x01;
-        Serial.print("Config Chr\n");
         toio.pChrConfig->writeValue(data, 4, false);
       }
       else if (pChr->getUUID().equals(chrUuidMotion)) {
@@ -418,6 +417,9 @@ void loop() {
     // toioが接続されている場合
     for (int i = 0; i < toios.size(); i++) {
       // toios.at(i).commandMotor(false, 0x16, true, 0x16);
+
+      // プレイマットのx120,y180を原点に4列で整列させる
+      // 2台しかないので確認できないがバグってると報告アリ
       int rowX = i % 4;
       int rowY = i / 4;
 
