@@ -386,13 +386,13 @@ void loop() {
 
   if (M5.BtnA.wasPressed()) {
     if (toios.size() == 0) {
+      if (advDevices.size() == 0) {
+        // advertiseが見つかっていければ中止
+        return;
+      }
       // toioが接続されてなければ接続開始
       if (connectToServer()) {
 
-        if (advDevices.size() == 0) {
-          // advertiseが見つかっていければ中止
-          return;
-        }
         Serial.println("Success! we should now be getting notifications");
         // デバイススキャンを停止
         NimBLEDevice::getScan()->stop();
