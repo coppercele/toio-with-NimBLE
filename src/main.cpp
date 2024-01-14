@@ -7,10 +7,13 @@
 
 const int TOIO_UPDATE_INTERVAL = 1000; // toioのupdate()を呼ぶ間隔
 
+int width;
+int height;
+
 // 画面の一番下にメッセージを表示
 void bottomMessage(std::string msg) {
   M5.Display.fillScreen(TFT_BLACK);
-  M5.Display.setCursor(0, 220);
+  M5.Display.setCursor(0, height - 20);
   M5.Display.printf("%s", msg.c_str());
 }
 
@@ -37,6 +40,8 @@ void setup() {
   auto cfg = M5.config(); // M5Stack初期設定用の構造体を代入
   M5.begin(cfg);          // M5デバイスの初期化
 
+  width = M5.Display.width;
+  height = M5.Display.height;
   M5.Display.setTextSize(2); // テキストサイズを変更
   Serial.println("Starting NimBLE Client");
 

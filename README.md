@@ -20,3 +20,25 @@ toioの電源を入れると自動で認識し、画面下に数を表示しま�
 
 プレイマットがあるならば左ボタンを押すと整列します
 (自分は2個しか持ってないので未確認だがバグあるとの報告アリ)
+
+プレイマットの上にいるならば1秒ごとにtoioの座標をディスプレイに表示します。
+
+### 複数接続するときの注意
+
+NimBLEはデフォルトでは２台までしか同時接続できないようになっています。
+3台以上接続する場合は
+
+projectRoot/libdeps/NimBLE-Arduino/src/nimconfig.h
+
+内の
+
+#ifndef CONFIG_BT_NIMBLE_MAX_CONNECTIONS
+#define CONFIG_BT_NIMBLE_MAX_CONNECTIONS 3
+#endif
+
+を10に変更してください。
+NimBLEの制限により9台まで接続できます。
+
+https://x.com/mongonta555/status/1741075503791161490?s=20
+
+タカオ(Takao) @mongonta555 さん情報ありがとうございます。
