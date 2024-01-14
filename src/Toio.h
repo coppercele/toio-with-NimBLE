@@ -34,9 +34,40 @@ public:
   void light(uint8_t mode, uint8_t msec, uint8_t red, uint8_t green, uint8_t blue);
   int battrey();
   void goTo(u_int16_t x, uint16_t y, uint16_t direction);
+  void wait(void *pvParameters);
+  void synchronizedMotor(bool forwardLeft, uint8_t speedLeft, bool forwardRight, uint8_t speedRight, ulong now, ulong buffer);
+  void update();
 };
 
 Toio::Toio() {
+}
+
+void Toio::update() {
+
+  // Position ID を読む
+  NimBLEAttValue value = pChrIdInf->readValue();
+  const uint8_t *pData = value.data();
+  int length = value.length();
+
+  // 0リセット
+  x = 0;
+  y = 0;
+  direction = 0;
+  if (length == 1 && pData[0] & 0x03) {
+    // 0x03(miss)なら座標を0リセット
+  }
+  else {
+    // x,y,directionはuint16_tがuint8_tのリトルエンディアンに分割されている
+    x = x | pData[2];
+    x = (x << 8) | pData[1];
+    y = y | pData[4];
+    y = (y << 8) | pData[3];
+    direction = direction | pData[6];
+    direction = (direction << 8) | pData[5];
+    Serial.printf("ID: %d Pos x:%d ", id, x);
+    Serial.printf("y:%d ", y);
+    Serial.printf("dirc:%d\n", direction);
+  }
 }
 
 // バッテリー残量をintで返す
@@ -87,6 +118,12 @@ void Toio::commandMotor(bool forwardLeft, uint8_t speedLeft, bool forwardRight, 
   pChrMotor->writeValue(data, 7, false);
   Serial.println("Motor command sent");
 }
+
+// void Toio::wait(void *pvParameters) {
+//   ulong lag = millis() - thisNow; // 関数呼び出しから
+//   thisBuffer -= lag;
+//   delay(thisBuffer);
+// }
 
 // 目標座標へ移動する
 // directionは移動後にその向きに回転する
